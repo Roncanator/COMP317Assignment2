@@ -1,13 +1,13 @@
 import java.io.DataInputStream;
 
-class test {
+class Encoder {
 
     public static void main(String[] args){
 	try{
 	    //check there is only 1 argument passed
 	    if(args.length != 1){
 		System.err.println("USAGE ERROR:" + 
-                  "Integer needed for maximum number of bits to encode");
+                  "1 Integer needed for maximum number of bits to encode");
 		return;
 	    }
 	    //if there are no bytes to read from System.in, return
@@ -21,105 +21,51 @@ class test {
 		System.err.println("Number of bits must be less than 1 byte");
 		return;
 	    }
-	    
+	    //Create a DataInputStream to read Bytes from System.in
 	    DataInputStream dis = new DataInputStream(System.in);
-	    newtrie trie = new newtrie(5);
+	    Trie trie = new Trie(5);
+	    //Initilaise the trie with RESET and initial byte values
 	    trie.initialise();
-	    trie.print();
-	    //need current?
-	    int current = trie.getCurrent() + 1;
-	    //dont need this chain stuff
-	    int tracker = 0;
-	    Byte[] chain = new Byte[50];
-	    //finalised
-	    int read;
-	    read = dis.read();
-	    System.err.println("First Read: " + Integer.toString(read));
-	    Byte item = (byte)read;
-	    Byte further = item;
-	    Node previous;
-	    Node latest = trie.root.findChild(item);
+	    //read a byte in
+	    int read = dis.read();
+	    int item = read;
+	    //keep track of the previous item
+	    int past = item;
+	    //Find the root Child the read item is
+	    Node latest = trie.rootFind(item);
+	    //keep atrack of the previous Node
+	    Node previous = latest;
 	    try{
+		//While not the end of the Byte Stream
 		while(read != -1){
-		    System.err.println("1 while");
-		    item = (byte)read;
-		    System.out.print("Latest: " );
-		    latest.printNode();
-		    previous = latest;
-		    try{
-			while(latest != null){
-			    System.err.println("2 while");
-			    read = dis.read();
-			    item = (byte)read;
-			    latest = previous.findChild(item);
-			    System.out.print("Latest: " );
-			    latest.printNode();
-			}
+		    //loop trying to find next phrase in children
+		    while(latest != null && read!= -1){
+			//keep track of the last values
+			previous = latest;
+			past = item;
+			//read the next value in
+			read = dis.read();		
+			item = read;
+			//Check the next value is in a child of previous Node
+			latest = previous.findChild(past);
+			
 		    }
-		    catch(Exception e){
-			System.err.println(e.getMessage());
+		    //There has been a mismatch - latest is null
+		    //If the item read is the end of file
+		    if(item == -1){
+			//break dont want to add to file at all
+			break;
 		    }
-		    int output = trie.add(previous, item);
-		    System.out.println(Integer.toString(output));
-		    read = dis.read();
-		    System.err.println("Next Read: " + Integer.toString(read));
+		    //get the mismatched parent's number to output
+		    int no = trie.add(previous, item);
+		    System.out.println(Integer.toString(no));
+		    //Keep going with the mismatch character
+		    latest = trie.rootFind(item);
 		}
 	    }
 	    catch(Exception e){
 		System.err.println(e.getMessage());
 	    }
-	    		
-		/*
-		//Found the initial root child that read matches
-		try{
-		    while(latest != null){
-			//get the next read element
-			read = dis.read();
-			item = (byte)read;
-			//search the latest node root
-			try{
-			    if(read != -1){
-				System.err.println("can read another");
-				previous = latest;
-				
-				latest = previous.findChild(item);
-				/*if(latest == null){
-				  System.err.println("Ive found null");
-				  }	
-				
-				System.err.print("Latest: ");
-				latest.printNode();
-				System.err.println("Now to add");
-			    }
-			    else{
-				//its the end of file - special case
-			    }
-			}
-			catch(Exception e){
-			    System.err.println(e.getMessage());
-			}
-	
-			//Need to add item to previous' children
-			//& output previous number
-			int previousNumber = trie.add(previous, item);
-			System.err.println("Added to previous");
-			System.err.println("Previous Number : " + Integer.toString(previousNumber));
-			
-			System.err.println("LOOPING");
-		    }
-		}
-		catch(Exception e){
-		    System.err.println(e.getMessage());
-		}
-		System.err.println("NO MATCHING CHILD");
-		read = dis.read();
-		
-		}*/
-	    
-	    /*
-	    Byte tofind = (byte)245;
-	    Node found = trie.findRootChild(tofind);
-	    found.printNode();*/
 	}
 	catch(Exception e){
 	    System.err.println(e.getMessage());
