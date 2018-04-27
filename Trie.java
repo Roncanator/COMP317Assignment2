@@ -71,9 +71,23 @@ class Trie {
 	//Otherwise it was not found so return null
 	return null;
     }
+
+    //RESETS the node when it past its maximum size
+    public void reset(){
+	//loses all the root's children - to reset
+	root = null;
+	//sets the current count to zero
+	setCurrent(0);
+	//create a new clear root Node to 
+	root = new Node(0, current);
+	//reinitialises reset value and byte values
+	initialise();
+    }
     
     //Getter and Setter for the Current Values
     //Used for when Trie is RESET
     public int getCurrent() { return current; }
     public void setCurrent(int value) { current = value; }
+    //returns an integer of the RESET value
+    public int getResetValue() { return root.children[0].number; }
 }

@@ -15,12 +15,13 @@ class Encoder {
 		System.err.println("No input bytes detected");
 		return;
 	    }
-	    int maximum = Integer.parseInt(args[0]);
 	    //Answer to the question on moodle MUST CHANGE!!
+	    int maximum = Integer.parseInt(args[0]);
 	    if(maximum  == 0){
-		System.err.println("Number of bits must be less than 1 byte");
+		System.err.println("Argument must be a positive integer");
 		return;
 	    }
+	    long maxBits = (long)Math.pow(2, maximum);
 	    //Create a DataInputStream to read Bytes from System.in
 	    DataInputStream dis = new DataInputStream(System.in);
 	    Trie trie = new Trie(5);
@@ -59,6 +60,19 @@ class Encoder {
 		    //get the mismatched parent's number to output
 		    int no = trie.add(previous, item);
 		    System.out.println(Integer.toString(no));
+		    //check if overrun the maximum trie size
+		    int current = trie.getCurrent();
+		    //If we have reached the maximum size of the trie
+		    //need to RESET it
+		    if(current >= maxBits){
+			//get the reset phrase number
+			int resetNo = trie.getResetValue();
+			//output that number to tell decoder to reset
+			System.out.println(Integer.toString(resetNo));
+			//tell trie to reset all values and reintialise
+			trie.reset();
+		    }
+		    
 		    //Keep going with the mismatch character
 		    latest = trie.rootFind(item);
 		}
