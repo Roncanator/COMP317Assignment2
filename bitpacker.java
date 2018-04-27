@@ -24,27 +24,19 @@ class bitpacker {
 		    //change the highest binary value
 		    highestBinary = number;
 		    //change highest Bits value
-		    highestBits = (Integer.toBinaryString(number)).length();
-		    //System.out.println("New highest: " + Integer.toString(number) + " with " + Integer.toString(highestBits) + " set bits");
-		    
+		    highestBits = (Integer.toBinaryString(number)).length();    
 		}
 		String binary = Integer.toBinaryString(number);
-		//System.out.println("line: " + line + " int: " + binary);
 		//If less than the greatest
 		if(binary.length() < highestBits) {
 		    //lengthen out to the number of highest bits
-		    //System.out.println("need to lengthen");
-		    binary = lengthen(binary, highestBits);
-		    //System.err.println("Lengthed: " + binary);	    
+		    binary = lengthen(binary, highestBits);	    
 		}
 		//Now need to pack bits into integers
 		//put line into outputLine
 		outputLine = outputLine + binary;
-		//System.out.println("outputLine: " + outputLine);
 		if(outputLine.length() > 8){
-		    //System.out.println("CAN OUTPUT the 8 bits");
 		    outputLine = outputByte(outputLine);
-		    //System.out.println("new outputLine: " + outputLine.toString());
 		}
 		line = br.readLine();
 		}
@@ -55,21 +47,33 @@ class bitpacker {
 	    System.err.println(e.getMessage());
 	}
     }
-
+    
+    //Lengthens a string to the current maximum number of bits
+    //This is to lengthen then to all the same size
+    //EG initially values need to be 9 bits in length
+    //so anything less needs to have 00s concatenated to the front
     public static String lengthen(String binary, int highestBits){
 	String result;
+	//Create a stringbuilder
 	StringBuilder sb = new StringBuilder();
+	//for the maximum amount of bits create a string that long
 	for(int i = 0; i< highestBits; i++){
 	    sb.append("0");
 	}
+	//Make it a string
 	String unedited = sb.toString();
+	//recude the size of the unedited bytes
+	//and concatenate the original bits on
 	result = unedited.substring(binary.length()) + binary;
 	return result;	
     }
+
+    //Output 8 Bits at a time
+    //And removes the 8 bits off the outputLine
     public static String outputByte(String outputLine){
         String result;
+	//get the next 8 bits to output
 	String output = outputLine.substring(0, 8);
-	//System.out.println("time to output: " + output);
 	//shift the outputted bits out of string
 	result = outputLine.substring(8);
 	//print out byte 1 char at a time
@@ -79,10 +83,14 @@ class bitpacker {
 	//Return the lesser string now
 	return result;
     }
+
+    //If the output is not a multiple of 8 there will still be bits to print out
+    //So print out the remaining bits in the string
     public static void outputEnd(String outputLine){
 	for(int i = 0; i< outputLine.length(); i++){	    
 	    System.out.print(outputLine.charAt(i));
 	}
+	//put it all on one line of output
 	System.out.println();
     }
 }
