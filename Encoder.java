@@ -58,7 +58,9 @@ class Encoder {
 			break;
 		    }
 		    //get the mismatched parent's number to output
-		    int no = trie.add(previous, item);
+
+		    //changed item to past
+		    int no = trie.add(previous, past);
 		    System.out.println(Integer.toString(no));
 		    //check if overrun the maximum trie size
 		    int current = trie.getCurrent();
