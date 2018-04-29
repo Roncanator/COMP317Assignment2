@@ -1,3 +1,10 @@
+/*******************************************************
+ * 
+ *          Alexander Bakx - 1283648
+ *          Riley Cochrane - 1218251
+ *
+ *******************************************************/
+
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
@@ -44,7 +51,7 @@ class bitpacker {
 	    outputEnd(outputLine);
 	}
 	catch(Exception e){
-	    System.err.println(e.getMessage());
+	    System.err.println("Bitpacker " + e.getLocalizedMessage());
 	}
     }
     
@@ -76,10 +83,8 @@ class bitpacker {
 	String output = outputLine.substring(0, 8);
 	//shift the outputted bits out of string
 	result = outputLine.substring(8);
-	//print out byte 1 char at a time
-	for(int i = 0; i<output.length(); i++){
-	    System.out.print(output.charAt(i));
-	}
+        int byteint = Integer.parseInt(output, 2);
+	System.out.print(Integer.toString(byteint) + " ");
 	//Return the lesser string now
 	return result;
     }
@@ -87,9 +92,8 @@ class bitpacker {
     //If the output is not a multiple of 8 there will still be bits to print out
     //So print out the remaining bits in the string
     public static void outputEnd(String outputLine){
-	for(int i = 0; i< outputLine.length(); i++){	    
-	    System.out.print(outputLine.charAt(i));
-	}
+	int byteint = Integer.parseInt(outputLine, 2);
+	System.out.print(Integer.toString(byteint));
 	//put it all on one line of output
 	System.out.println();
     }

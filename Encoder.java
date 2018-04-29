@@ -1,3 +1,10 @@
+/*******************************************************
+ * 
+ *          Alexander Bakx - 1283648
+ *          Riley Cochrane - 1218251
+ *
+ *******************************************************/
+
 import java.io.DataInputStream;
 
 class Encoder {
@@ -80,11 +87,11 @@ class Encoder {
 		}
 	    }
 	    catch(Exception e){
-		System.err.println(e.getMessage());
+		System.err.println("Encoder: " + e.getMessage());
 	    }
 	}
 	catch(Exception e){
-	    System.err.println(e.getMessage());
+	    System.err.println("Encoder: " + e.getMessage());
 	}
     }
 }
